@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="jquery.mobile-1.4.2/jquery.mobile-1.4.2.css" />
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery.mobile-1.4.2/jquery.mobile-1.4.2.js"></script>
+</head>
+<body>
+    <div data-role="page" id="page1">
+        <div data-role="header" data-position="fixed">
+            <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-home">首页</button>
+            <h1>Header</h1>
+            <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-edit">首页</button>
+        </div>
+        <div data-role="content">
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#" data-icon="home" class="ui-btn-active">Home</a></li>
+                    <li><a href="#" data-icon="mail">Mail</a></li>
+                    <li><a href="#Search" data-transition="slideup" data-icon="search">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="page" id="Search">
+        <div data-role="header" data-position="fixed">
+            <a href="#page1" data-transition="slideup" class="ui-btn ui-btn-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back">Back</a>
+            <h1>Header</h1>
+            <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-edit">首页</button>
+        </div>
+        <div data-role="content">
+            <form>
+                <div data-role="fieldcontain">
+                    <label for="stockID">ID: </label>
+                    <input type="text" name="stockID" id="stockID">
+                </div>
+                <input type="submit" data-inline="true" value="Search">
+            </form>
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#" data-icon="home">Home</a></li>
+                    <li><a href="#" data-icon="mail">Mail</a></li>
+                    <li><a href="#" data-icon="search" class="ui-btn-active">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
