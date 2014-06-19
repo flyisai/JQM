@@ -2,34 +2,68 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title></title>
     <link rel="stylesheet" href="jquery.mobile-1.4.2/jquery.mobile-1.4.2.css" />
     <script src="jquery-1.11.1.min.js"></script>
     <script src="jquery.mobile-1.4.2/jquery.mobile-1.4.2.js"></script>
+    <style>
+        .description {
+            height: 200px;
+            overflow: hidden;
+            border-top: 1px dotted #f4c63f;
+        }
+        .left {
+            float: left;
+            width: 100px;
+        }
+        .left img {
+            width: 100%;
+            max-width: 90px;
+            position: relative;
+            top: 30px;
+        }
+        .right{
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 200px;
+        }
+        .rating {
+            color: darkred;
+            font-size: 12px;
+        }
+        .clear:after {
+            content: " ";
+            display: block;
+            height: 0;
+            clear: both;
+        }
+    </style>
 </head>
 <body>
-    <div data-role="page" id="page1">
+    <div data-role="page" id="home">
         <div data-role="header" data-position="fixed">
             <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-home">首页</button>
             <h1>Header</h1>
             <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-edit">首页</button>
         </div>
         <div data-role="content">
+            <h2>推荐书</h2>
         </div>
         <div data-role="footer" data-position="fixed">
             <div data-role="navbar">
                 <ul>
-                    <li><a href="#" data-icon="home" class="ui-btn-active">Home</a></li>
+                    <li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
                     <li><a href="#" data-icon="mail">Mail</a></li>
-                    <li><a href="#Search" data-transition="slideup" data-icon="search">Search</a></li>
+                    <li><a href="#search" data-transition="slideup" data-icon="search">Search</a></li>
                 </ul>
             </div>
         </div>
     </div>
-
-    <div data-role="page" id="Search">
+    <div data-role="page" id="search">
         <div data-role="header" data-position="fixed">
-            <a href="#page1" data-transition="slideup" class="ui-btn ui-btn-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back">Back</a>
+            <a href="#home" data-transition="slideup" class="ui-btn ui-btn-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back">Back</a>
             <h1>Header</h1>
             <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-edit">首页</button>
         </div>
@@ -47,10 +81,56 @@
                 <ul>
                     <li><a href="#" data-icon="home">Home</a></li>
                     <li><a href="#" data-icon="mail">Mail</a></li>
-                    <li><a href="#" data-icon="search" class="ui-btn-active">Search</a></li>
+                    <li><a href="#" data-icon="search" class="ui-btn-active ui-state-persist">Search</a></li>
                 </ul>
             </div>
         </div>
     </div>
+
+    <script>
+
+        $.ajaxPrefilter(function(options){
+            options.url = 'https://api.douban.com' + options.url;
+            options.crossDomain = true;
+        });
+
+        var bookList = [25844017,25852441,25845651,25884890,25859542];
+        $('#home').on('pagecreate',function(){
+
+            $.getJSON('/v2/book/search?callback=?', {tag:'推理'}, function(data){
+                console.log(data)
+                var template = '';
+                for(var i=0; i<data.books.length; i++) {
+                    var text = data.books[i].summary;
+                    text.length < 80 ? null : text = text.substring(0,80) + '...';
+                    template += '<div class="description clear">' +
+                                    '<div class="left"><img src="' + data.books[i].image + '" /></div>' +
+                                    '<div class="right"><p><a href="#">' + data.books[i].title + '</a></p>' +
+                                        '<p>' + data.books[i].author[0] + '/' + data.books[i].translator + '/' + data.books[i].pubdate + '/' + data.books[i].price +'</p>' +
+                                        '<p class="rating">' + data.books[i].rating.average + ' (' + data.books[i].rating.numRaters + '人评价)</p>' +
+                                        '</div>' +
+                                '</div>';
+                }
+                $('[data-role="content"]')[0].innerHTML = template;
+            });
+        });
+
+        $(document).on('mouseover', '#home td', function(e){
+            $(e.currentTarget)
+        });
+
+        function showLoader() {
+            $.mobile.loading('show',{
+                text: '加载中...',
+                textVisible: true,
+                textonly: false,
+                theme: 'c'
+            });
+        }
+
+        function hideLoader() {
+            $.mobile.loading('hide');
+        }
+    </script>
 </body>
 </html>
