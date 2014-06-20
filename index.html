@@ -8,26 +8,26 @@
     <script src="jquery-1.11.1.min.js"></script>
     <script src="jquery.mobile-1.4.2/jquery.mobile-1.4.2.js"></script>
     <style>
+        ul {
+            margin: 0;
+            padding: 0;
+        }
         .description {
             height: 200px;
             overflow: hidden;
-            border-top: 1px dotted #f4c63f;
         }
         .left {
             float: left;
-            width: 100px;
-        }
-        .left img {
-            width: 100%;
-            max-width: 90px;
-            position: relative;
-            top: 30px;
+            width: 90px;
+            height: 170px;
+            padding-top: 20px;
         }
         .right{
             float: left;
-            width: 50%;
-            padding: 10px;
             height: 200px;
+            margin-left: 10px;
+            width: 50%;
+            white-space: normal;
         }
         .rating {
             color: darkred;
@@ -46,10 +46,10 @@
         <div data-role="header" data-position="fixed">
             <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-home">首页</button>
             <h1>Header</h1>
-            <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-edit">首页</button>
         </div>
         <div data-role="content">
-            <h2>推荐书</h2>
+            <h2>猛料</h2>
+            <ul></ul>
         </div>
         <div data-role="footer" data-position="fixed">
             <div data-role="navbar">
@@ -61,11 +61,11 @@
             </div>
         </div>
     </div>
+
     <div data-role="page" id="search">
         <div data-role="header" data-position="fixed">
             <a href="#home" data-transition="slideup" class="ui-btn ui-btn-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back">Back</a>
             <h1>Header</h1>
-            <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-edit">首页</button>
         </div>
         <div data-role="content">
             <form>
@@ -87,35 +87,37 @@
         </div>
     </div>
 
-    <script>
+    <div data-role="page" id="book">
+        <div data-role=""
+    </div>
 
+    <script>
+        console.log((!(~+[])+{})[--[~+""][+[]]*[~+[]] + ~~!+[]]+({}+[])[[~!+[]]*~+[]])
         $.ajaxPrefilter(function(options){
             options.url = 'https://api.douban.com' + options.url;
             options.crossDomain = true;
         });
 
-        var bookList = [25844017,25852441,25845651,25884890,25859542];
         $('#home').on('pagecreate',function(){
-
             $.getJSON('/v2/book/search?callback=?', {tag:'推理'}, function(data){
                 console.log(data)
                 var template = '';
                 for(var i=0; i<data.books.length; i++) {
                     var text = data.books[i].summary;
                     text.length < 80 ? null : text = text.substring(0,80) + '...';
-                    template += '<div class="description clear">' +
-                                    '<div class="left"><img src="' + data.books[i].image + '" /></div>' +
-                                    '<div class="right"><p><a href="#">' + data.books[i].title + '</a></p>' +
+                    template += '<li class="ui-btn ui-icon-carat-r ui-btn-icon-right"><div class="description clear">' +
+                                    '<div class="left"><img src="' + data.books[i].image + '" width=\"90px\" /></div>' +
+                                    '<div class="right"><p>' + data.books[i].title + '</p>' +
                                         '<p>' + data.books[i].author[0] + '/' + data.books[i].translator + '/' + data.books[i].pubdate + '/' + data.books[i].price +'</p>' +
                                         '<p class="rating">' + data.books[i].rating.average + ' (' + data.books[i].rating.numRaters + '人评价)</p>' +
                                         '</div>' +
-                                '</div>';
+                                '</div></li>';
                 }
-                $('[data-role="content"]')[0].innerHTML = template;
+                $('[data-role="content"] ul')[0].innerHTML += template;
             });
         });
 
-        $(document).on('mouseover', '#home td', function(e){
+        $(document).on('click', '#home li', function(e){
             $(e.currentTarget)
         });
 
