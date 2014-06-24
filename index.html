@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="save" content="history" />
     <title></title>
     <link rel="stylesheet" href="jquery.mobile-1.4.2/jquery.mobile-1.4.2.css" />
     <script src="jquery-1.11.1.min.js"></script>
@@ -39,85 +40,106 @@
             height: 0;
             clear: both;
         }
-        .book-left {
+        .book-info {
+
+        }
+        .book-info img {
             float: left;
-            width: 300px;
+            width: 100px;
+        }
+        .book-detail {
+            float: left;
+            margin-left: 10px;
+        }
+        .book-detail span {
+            color: #000000;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        #book h3 {
+            color: yellowgreen;
+            font-weight: bold;
+        }
+        #book p {
+            color: gray;
+            font-size: 0.8em;
         }
     </style>
 </head>
 <body>
-    <div data-role="page" id="home">
-        <div data-role="header" data-position="fixed">
-            <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-home">首页</button>
-            <h1>Header</h1>
-        </div>
-        <div data-role="content">
-            <h2>猛料</h2>
-            <ul></ul>
-        </div>
-        <div data-role="footer" data-position="fixed">
-            <div data-role="navbar">
-                <ul>
-                    <li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
-                    <li><a href="#" data-icon="mail">Mail</a></li>
-                    <li><a href="#search" data-transition="slideup" data-icon="search">Search</a></li>
-                </ul>
-            </div>
+<div data-role="page" id="home">
+    <div data-role="header" data-position="fixed" data-add-back-btn="true">
+        <h1>Header</h1>
+    </div>
+    <div data-role="content">
+        <h2>猛料</h2>
+        <ul class="book-list"></ul>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
+                <li><a href="#searchList" data-icon="mail">Sign in</a></li>
+                <li><a href="#search" data-icon="search" data-rel="popup" data-position-to="window" data-transition="pop">Search</a></li>
+            </ul>
         </div>
     </div>
 
-    <div data-role="page" id="search">
-        <div data-role="header" data-position="fixed">
-            <a href="#home" data-transition="slideup" class="ui-btn ui-btn-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back">Back</a>
-            <h1>Header</h1>
-        </div>
-        <div data-role="content">
-            <form>
-                <div data-role="fieldcontain">
-                    <label for="stockID">ID: </label>
-                    <input type="text" name="stockID" id="stockID">
-                </div>
-                <input type="submit" data-inline="true" value="Search">
-            </form>
-        </div>
-        <div data-role="footer" data-position="fixed">
-            <div data-role="navbar">
-                <ul>
-                    <li><a href="#" data-icon="home">Home</a></li>
-                    <li><a href="#" data-icon="mail">Mail</a></li>
-                    <li><a href="#" data-icon="search" class="ui-btn-active ui-state-persist">Search</a></li>
-                </ul>
+    <div data-role="popup" id="search" data-theme="a" class="ui-corner-all">
+        <form id="bookSearch" autocomplete="off">
+            <div style="padding:10px 20px;">
+                <h3>Search</h3>
+                <label for="q">书名：</label>
+                <input type="text" name="q" id="q" value="" placeholder="搜索的书名" data-theme="a">
+                <label for="tag">标签：</label>
+                <input type="text" name="tag" id="tag" value="" placeholder="标签名" data-theme="a">
+                <button onclick="searchBook()" type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">搜索</button>
             </div>
-        </div>
+        </form>
     </div>
+</div>
 
-    <div data-role="page" id="book">
-        <div data-role="header" data-position="fixed">
-            <button class="ui-btn-inline ui-corner-all ui-btn ui-btn-icon-left ui-icon-home">首页</button>
-            <h1>Header</h1>
+<div data-role="page" id="searchList">
+    <div data-role="header" data-add-back-btn="true">
+        <h1>Header</h1>
+    </div>
+    <div data-role="content">
+        <ul></ul>
+    </div>
+</div>
+
+<div data-role="page" id="book">
+    <div data-role="header" data-position="fixed" data-add-back-btn="true">
+        <h1>Header</h1>
+    </div>
+    <div data-role="content">
+        <div class="book-info clear">
+            <img src="" />
+            <div class="book-detail">
+                <p>
+                    <span>作者：</span><br />
+                    <span>出版社：</span><br />
+                    <span>出版年：</span><br />
+                    <span>页数：</span><br />
+                    <span>定价：</span><br />
+                    <span>装帧：</span><br />
+                    <span>ISBN：</span>
+                </p>
+            </div>
         </div>
-        <div data-role="content">
-            <div class="book-left">
-                <img src="" />
-            </div>
-            <div class="book-info">
-                <p><span>作者：</span></p>
-                <p><span>出版社：</span></p>
-                <p><span>原作名：</span></p>
-            </div>
-            <div class="book-content"></div>
-            <div class="book-author"></div>
-        </div>
-        <div data-role="footer" data-position="fixed">
-            <div data-role="navbar">
-                <ul>
-                    <li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
-                    <li><a href="#" data-icon="mail">Mail</a></li>
-                    <li><a href="#search" data-transition="slideup" data-icon="search">Search</a></li>
-                </ul>
-            </div>
+        <div class="book-content"></div>
+        <div class="book-author"></div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
+                <li><a href="#" data-icon="mail">Mail</a></li>
+                <li><a href="#search" data-transition="slideup" data-icon="search">Search</a></li>
+            </ul>
         </div>
     </div>
+</div>
 
     <script>
         console.log((!(~+[])+{})[--[~+""][+[]]*[~+[]] + ~~!+[]]+({}+[])[[~!+[]]*~+[]])
@@ -129,33 +151,67 @@
         $('#home').on('pagecreate',function(){
             $.getJSON('/v2/book/search?callback=?', {tag:'推理'}, function(data){
                 console.log(data)
-                var template = '';
+                var result = '';
                 for(var i=0; i<data.books.length; i++) {
-                    var text = data.books[i].summary;
-                    text.length < 80 ? null : text = text.substring(0,80) + '...';
-                    template += '<li class="ui-btn ui-icon-carat-r ui-btn-icon-right" data-id=' + data.books[i].id + '><div class="description clear">' +
-                                    '<div class="left"><img src="' + data.books[i].image + '" width=\"90px\" /></div>' +
-                                    '<div class="right"><p>' + data.books[i].title + '</p>' +
-                                        '<p>' + data.books[i].author[0] + '/' + data.books[i].translator + '/' + data.books[i].pubdate + '/' + data.books[i].price +'</p>' +
-                                        '<p class="rating">' + data.books[i].rating.average + ' (' + data.books[i].rating.numRaters + '人评价)</p>' +
-                                        '</div>' +
-                                '</div></li>';
+                    result += template(data , i)
+                    //var text = data.books[i].summary;
+                    //text.length < 80 ? null : text = text.substring(0,80) + '...';
+                    /*template += '<li class="ui-btn ui-icon-carat-r ui-btn-icon-right" data-id=' + data.books[i].id + '><div class="description clear">' +
+                            '<div class="left"><img src="' + data.books[i].image + '" width=\"90px\" /></div>' +
+                            '<div class="right"><p>' + data.books[i].title + '</p>' +
+                            '<p>' + data.books[i].author[0] + '/' + data.books[i].translator + '/' + data.books[i].pubdate + '/' + data.books[i].price +'</p>' +
+                            '<p class="rating">' + data.books[i].rating.average + ' (' + data.books[i].rating.numRaters + '人评价)</p>' +
+                            '</div>' +
+                            '</div></li>';*/
                 }
-                $('[data-role="content"] ul')[0].innerHTML += template;
+                $('[data-role="content"] ul')[0].innerHTML += result;
             });
         });
 
-        $(document).on('tap', '#home li', function(e){
+        $(document).on('tap', '#home .book-list li', function(e){
             var id = e.currentTarget.getAttribute('data-id');
             $.getJSON('/v2/book/' + id + '?callback=?', function(data){
                 console.log(data);
-                $('#book [data-role="content"] img').attr('src', data.images.large);
+                $('#book [data-role="content"] img').attr('src', data.images.medium);
+                $('#book .book-content').html('<h3>内容简介</h3><p>' + data.summary + '</p><h3>作者简介</h3><p>' + data.author_intro + '</p>')
             }).done(function(){
-                console.log('done')
                 $("body").pagecontainer('change', '#book',{
                     transition: 'slideup'
                 })
             });
+        });
+
+        function searchBook(){
+            var data = $('#bookSearch').serialize();
+            $.getJSON('/v2/book/search?callback=?',data).done(function(data){
+                console.log(data)
+                var result = '';
+                for(var i=0; i<data.books.length; i++){
+                    result += template(data, i);
+                }
+                $('#searchList [data-role="content"] ul').html(result);
+                if(data.total > data.count){
+                    $('#searchList [data-role="content"] ul')[0]
+                }
+                $('body').pagecontainer('change', '#searchList', {
+                    transition: 'slideup'
+                });
+                return false;
+            });
+        }
+
+        function template(data, i) {
+            return '<li class="ui-btn ui-icon-carat-r ui-btn-icon-right" data-id=' + data.books[i].id + '><div class="description clear">' +
+                    '<div class="left"><img src="' + data.books[i].image + '" width=\"90px\" /></div>' +
+                    '<div class="right"><p>' + data.books[i].title + '</p>' +
+                    '<p>' + data.books[i].author[0] + '/' + data.books[i].translator + '/' + data.books[i].pubdate + '/' + data.books[i].price +'</p>' +
+                    '<p class="rating">' + data.books[i].rating.average + ' (' + data.books[i].rating.numRaters + '人评价)</p>' +
+                    '</div>' +
+                    '</div></li>';
+        }
+
+        $(document).on('tap', 'a[role="button"]', function(){
+            $('#bookSearch')[0].reset()
         });
 
         function showLoader() {

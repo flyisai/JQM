@@ -1,12 +1,87 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-    <div data-role="page">
-        <div data-role="header"></div>
+<div data-role="page" id="home">
+    <div data-role="header" data-position="fixed" data-add-back-btn="true">
+        <h1>Header</h1>
     </div>
-</body>
-</html>
+    <div data-role="content">
+        <h2>猛料</h2>
+        <ul class="book-list"></ul>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
+                <li><a href="#popupLogin" data-icon="mail"  data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">Sign in</a></li>
+                <li><a href="#search" data-icon="search" data-rel="popup" data-position="window">Search</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div data-role="popup" id="search">
+    <p>This is a completely basic popup, no options set.</p>
+</div>
+
+<div data-role="page" id="book">
+    <div data-role="header" data-position="fixed" data-add-back-btn="true">
+        <h1>Header</h1>
+    </div>
+    <div data-role="content">
+        <div class="book-info clear">
+            <img src="" />
+            <div class="book-detail">
+                <p>
+                    <span>作者：</span><br />
+                    <span>出版社：</span><br />
+                    <span>出版年：</span><br />
+                    <span>页数：</span><br />
+                    <span>定价：</span><br />
+                    <span>装帧：</span><br />
+                    <span>ISBN：</span>
+                </p>
+            </div>
+        </div>
+        <div class="book-content"></div>
+        <div class="book-author"></div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
+                <li><a href="#" data-icon="mail">Mail</a></li>
+                <li><a href="#search" data-transition="slideup" data-icon="search">Search</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+            <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</button>
+        </div>
+    </form>
+</div>
+
+$('#home').on('pagecreate',function(){
+$.getJSON('/v2/book/search?callback=?', {tag:'推理'}, function(data){
+console.log(data)
+var template = '';
+for(var i=0; i<data.books.length; i++) {
+var text = data.books[i].summary;
+text.length < 80 ? null : text = text.substring(0,80) + '...';
+template += '<li class="ui-btn ui-icon-carat-r ui-btn-icon-right" data-id=' + data.books[i].id + '><div class="description clear">' +
+    '<div class="left"><img src="' + data.books[i].image + '" width=\"90px\" /></div>' +
+    '<div class="right"><p>' + data.books[i].title + '</p>' +
+        '<p>' + data.books[i].author[0] + '/' + data.books[i].translator + '/' + data.books[i].pubdate + '/' + data.books[i].price +'</p>' +
+        '<p class="rating">' + data.books[i].rating.average + ' (' + data.books[i].rating.numRaters + '人评价)</p>' +
+        '</div>' +
+    '</div></li>';
+}
+$('[data-role="content"] ul')[0].innerHTML += template;
+});
+});
